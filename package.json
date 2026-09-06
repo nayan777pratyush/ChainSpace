@@ -1,0 +1,31 @@
+{
+  "name": "smartcontracts-dapp",
+  "version": "2.0.0",
+  "private": true,
+  "description": "A beautiful 3D Ethereum smart-contract playground built with Next.js, ethers.js and Hardhat.",
+  "scripts": {
+    "dev": "node scripts/dev.js",
+    "build": "node scripts/build.js",
+    "start": "next start",
+    "compile": "npx hardhat compile",
+    "test": "npx hardhat test",
+    "node": "npx hardhat node",
+    "deploy:local": "npx hardhat run --network localhost scripts/deploy.js",
+    "deploy:sepolia": "npx hardhat run --network sepolia scripts/deploy.js"
+  },
+  "dependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.5",
+    "@nomiclabs/hardhat-waffle": "^2.0.3",
+    "@openzeppelin/contracts": "^4.6.0",
+    "autoprefixer": "^10.2.5",
+    "chai": "^4.3.6",
+    "ethereum-waffle": "^3.4.4",
+    "ethers": "^5.6.4",
+    "hardhat": "^2.9.3",
+    "next": "^10.0.8",
+    "postcss": "^8.2.12",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "tailwindcss": "^2.1.2"
+  }
+}

@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+
+# Hardhat
+cache/
+artifacts/
+
+# Environment / secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Test / coverage
+coverage/
+coverage.json
+typechain/
+
+# OS files
+.DS_Store
+
+# VS Code / local editor
+.vscode/
+
+# VS Code Local History
+.history/
+
+# Logs
+*.log
