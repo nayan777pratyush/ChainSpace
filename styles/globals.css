@@ -7,50 +7,106 @@
   --panel: rgba(12, 18, 40, 0.72);
   --panel-strong: rgba(16, 24, 52, 0.9);
   --line: rgba(148, 163, 184, 0.15);
+
   --text: #f8fafc;
   --muted: #94a3b8;
+
   --cyan: #22d3ee;
   --violet: #a78bfa;
   --green: #34d399;
   --pink: #f472b6;
+
+  --input-bg: rgba(2, 6, 23, 0.62);
+  --input-text: #f8fafc;
+  --input-placeholder: #64748b;
 }
 
 html {
   scroll-behavior: smooth;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   color: var(--text);
   background:
-    radial-gradient(circle at 15% 10%, rgba(34, 211, 238, 0.13), transparent 28%),
-    radial-gradient(circle at 85% 15%, rgba(167, 139, 250, 0.16), transparent 30%),
-    radial-gradient(circle at 50% 85%, rgba(244, 114, 182, 0.08), transparent 32%),
+    radial-gradient(
+      circle at 15% 10%,
+      rgba(34, 211, 238, 0.13),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 85% 15%,
+      rgba(167, 139, 250, 0.16),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 50% 85%,
+      rgba(244, 114, 182, 0.08),
+      transparent 32%
+    ),
     var(--bg);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
   min-height: 100vh;
   overflow-x: hidden;
 }
 
 button,
-input {
+input,
+textarea,
+select {
   font: inherit;
 }
 
-* {
-  box-sizing: border-box;
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
 }
 
 ::selection {
   background: rgba(34, 211, 238, 0.3);
 }
 
+/* =========================================================
+   Background
+   ========================================================= */
+
 .grid-bg {
   background-image:
-    linear-gradient(rgba(148, 163, 184, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 163, 184, 0.045) 1px, transparent 1px);
+    linear-gradient(
+      rgba(148, 163, 184, 0.045) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(148, 163, 184, 0.045) 1px,
+      transparent 1px
+    );
+
   background-size: 46px 46px;
-  mask-image: linear-gradient(to bottom, black 0%, rgba(0,0,0,.4) 55%, transparent 100%);
+
+  mask-image:
+    linear-gradient(
+      to bottom,
+      black 0%,
+      rgba(0, 0, 0, 0.4) 55%,
+      transparent 100%
+    );
 }
 
 .orb {
@@ -67,7 +123,11 @@ input {
   height: 340px;
   top: 90px;
   left: -170px;
-  background: radial-gradient(circle, rgba(34,211,238,.2), transparent 68%);
+  background: radial-gradient(
+    circle,
+    rgba(34, 211, 238, 0.2),
+    transparent 68%
+  );
 }
 
 .orb-two {
@@ -75,7 +135,11 @@ input {
   height: 420px;
   top: 180px;
   right: -220px;
-  background: radial-gradient(circle, rgba(167,139,250,.2), transparent 68%);
+  background: radial-gradient(
+    circle,
+    rgba(167, 139, 250, 0.2),
+    transparent 68%
+  );
   animation-delay: -3s;
 }
 
@@ -84,99 +148,930 @@ input {
   height: 280px;
   bottom: 80px;
   left: 42%;
-  background: radial-gradient(circle, rgba(244,114,182,.12), transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(244, 114, 182, 0.12),
+    transparent 70%
+  );
   animation-delay: -5s;
 }
 
+/* =========================================================
+   Glass / 3D cards
+   ========================================================= */
+
 .glass {
-  background: linear-gradient(145deg, rgba(255,255,255,.085), rgba(255,255,255,.025));
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.085),
+      rgba(255, 255, 255, 0.025)
+    );
+
   border: 1px solid var(--line);
+
   box-shadow:
-    0 28px 80px rgba(0,0,0,.3),
-    inset 0 1px 0 rgba(255,255,255,.08);
+    0 28px 80px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
   backdrop-filter: blur(22px);
 }
 
 .card-3d {
   transform-style: preserve-3d;
-  transition: transform .35s ease, border-color .35s ease, box-shadow .35s ease;
+  transition:
+    transform 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
 }
 
 .card-3d:hover {
   transform: translateY(-7px) rotateX(2deg) rotateY(-1deg);
-  border-color: rgba(34, 211, 238, .25);
+
+  border-color: rgba(34, 211, 238, 0.25);
+
   box-shadow:
-    0 35px 90px rgba(0,0,0,.42),
-    0 0 45px rgba(34,211,238,.08),
-    inset 0 1px 0 rgba(255,255,255,.1);
+    0 35px 90px rgba(0, 0, 0, 0.42),
+    0 0 45px rgba(34, 211, 238, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
+/* =========================================================
+   Typography
+   ========================================================= */
+
 .neon-text {
-  text-shadow: 0 0 28px rgba(34, 211, 238, .25);
+  text-shadow: 0 0 28px rgba(34, 211, 238, 0.25);
 }
 
 .gradient-text {
-  background: linear-gradient(110deg, #fff 5%, #67e8f9 45%, #c4b5fd 82%, #f9a8d4 100%);
+  background: linear-gradient(
+    110deg,
+    #ffffff 5%,
+    #67e8f9 45%,
+    #c4b5fd 82%,
+    #f9a8d4 100%
+  );
+
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
+/* =========================================================
+   Terminal
+   ========================================================= */
+
 .terminal {
-  background: rgba(2, 6, 23, .78);
-  border: 1px solid rgba(148,163,184,.12);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+  background: rgba(2, 6, 23, 0.78);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
+
+/* =========================================================
+   3D Chain Cube
+   ========================================================= */
 
 .chain-cube {
   width: 58px;
   height: 58px;
   position: relative;
+
   transform-style: preserve-3d;
   transform: rotateX(-18deg) rotateY(26deg);
+
   animation: cubeSpin 14s linear infinite;
 }
 
 .chain-cube span {
   position: absolute;
   inset: 0;
+
   display: grid;
   place-items: center;
-  border: 1px solid rgba(103,232,249,.4);
-  background: linear-gradient(135deg, rgba(34,211,238,.15), rgba(167,139,250,.12));
-  box-shadow: 0 0 30px rgba(34,211,238,.1);
+
+  border: 1px solid rgba(103, 232, 249, 0.4);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(34, 211, 238, 0.15),
+      rgba(167, 139, 250, 0.12)
+    );
+
+  box-shadow: 0 0 30px rgba(34, 211, 238, 0.1);
 }
 
-.chain-cube span:nth-child(1) { transform: translateZ(29px); }
-.chain-cube span:nth-child(2) { transform: rotateY(180deg) translateZ(29px); }
-.chain-cube span:nth-child(3) { transform: rotateY(90deg) translateZ(29px); }
-.chain-cube span:nth-child(4) { transform: rotateY(-90deg) translateZ(29px); }
-.chain-cube span:nth-child(5) { transform: rotateX(90deg) translateZ(29px); }
-.chain-cube span:nth-child(6) { transform: rotateX(-90deg) translateZ(29px); }
-
-@keyframes cubeSpin {
-  from { transform: rotateX(-18deg) rotateY(26deg); }
-  to { transform: rotateX(-18deg) rotateY(386deg); }
+.chain-cube span:nth-child(1) {
+  transform: translateZ(29px);
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0) translateZ(0); }
-  50% { transform: translateY(-18px) translateZ(0); }
+.chain-cube span:nth-child(2) {
+  transform: rotateY(180deg) translateZ(29px);
 }
 
-@keyframes pulseGlow {
-  0%, 100% { opacity: .55; box-shadow: 0 0 0 rgba(52,211,153,0); }
-  50% { opacity: 1; box-shadow: 0 0 28px rgba(52,211,153,.15); }
+.chain-cube span:nth-child(3) {
+  transform: rotateY(90deg) translateZ(29px);
 }
+
+.chain-cube span:nth-child(4) {
+  transform: rotateY(-90deg) translateZ(29px);
+}
+
+.chain-cube span:nth-child(5) {
+  transform: rotateX(90deg) translateZ(29px);
+}
+
+.chain-cube span:nth-child(6) {
+  transform: rotateX(-90deg) translateZ(29px);
+}
+
+/* =========================================================
+   REAL ACTION BUTTONS
+   ========================================================= */
+
+.cs-action {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+
+  min-height: 46px;
+  padding: 0.75rem 1.1rem;
+
+  border: 1px solid rgba(103, 232, 249, 0.3);
+  border-radius: 0.9rem;
+
+  color: #020617 !important;
+  -webkit-text-fill-color: #020617 !important;
+
+  font-weight: 800;
+  letter-spacing: -0.01em;
+
+  background:
+    linear-gradient(
+      135deg,
+      #67e8f9 0%,
+      #22d3ee 48%,
+      #a78bfa 100%
+    );
+
+  box-shadow:
+    0 12px 30px rgba(34, 211, 238, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    filter 0.18s ease;
+}
+
+.cs-action:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  filter: brightness(1.08) saturate(1.08);
+
+  box-shadow:
+    0 18px 38px rgba(34, 211, 238, 0.28),
+    0 0 25px rgba(34, 211, 238, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.cs-action:active:not(:disabled) {
+  transform: translateY(1px) scale(0.98);
+
+  box-shadow:
+    0 7px 16px rgba(34, 211, 238, 0.18),
+    inset 0 2px 5px rgba(0, 0, 0, 0.12);
+}
+
+.cs-action:focus-visible {
+  outline: none;
+
+  box-shadow:
+    0 0 0 3px rgba(34, 211, 238, 0.18),
+    0 12px 30px rgba(34, 211, 238, 0.2);
+}
+
+.cs-action:disabled {
+  opacity: 0.42;
+  filter: grayscale(0.25);
+  transform: none;
+  box-shadow: none;
+}
+
+/* Violet token button */
+
+.cs-action-violet {
+  border-color: rgba(196, 181, 253, 0.35);
+
+  background:
+    linear-gradient(
+      135deg,
+      #c4b5fd 0%,
+      #a78bfa 48%,
+      #818cf8 100%
+    );
+
+  box-shadow:
+    0 12px 30px rgba(139, 92, 246, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.cs-action-violet:hover:not(:disabled) {
+  box-shadow:
+    0 18px 40px rgba(139, 92, 246, 0.3),
+    0 0 28px rgba(167, 139, 250, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* Pink voting button */
+
+.cs-action-pink {
+  border-color: rgba(251, 113, 133, 0.35);
+
+  background:
+    linear-gradient(
+      135deg,
+      #f9a8d4 0%,
+      #f472b6 50%,
+      #fb7185 100%
+    );
+
+  box-shadow:
+    0 12px 30px rgba(236, 72, 153, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.cs-action-pink:hover:not(:disabled) {
+  box-shadow:
+    0 18px 40px rgba(236, 72, 153, 0.3),
+    0 0 28px rgba(244, 114, 182, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* =========================================================
+   Form controls
+   ========================================================= */
+
+input,
+textarea,
+select {
+  color: var(--input-text) !important;
+
+  background-color: var(--input-bg) !important;
+
+  caret-color: var(--cyan) !important;
+
+  -webkit-text-fill-color: var(--input-text) !important;
+
+  border-color: rgba(255, 255, 255, 0.1);
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--input-placeholder) !important;
+  opacity: 1 !important;
+
+  -webkit-text-fill-color: var(--input-placeholder) !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  color: var(--input-text) !important;
+
+  -webkit-text-fill-color: var(--input-text) !important;
+
+  outline: none;
+
+  border-color: rgba(34, 211, 238, 0.38) !important;
+
+  box-shadow:
+    0 0 0 3px rgba(34, 211, 238, 0.07),
+    0 0 22px rgba(34, 211, 238, 0.06);
+}
+
+/* Number input arrows */
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  opacity: 0.6;
+}
+
+/* =========================================================
+   Status
+   ========================================================= */
 
 .status-dot {
   animation: pulseGlow 2s ease-in-out infinite;
 }
 
+/* =========================================================
+   Animations
+   ========================================================= */
+
+@keyframes cubeSpin {
+  from {
+    transform: rotateX(-18deg) rotateY(26deg);
+  }
+
+  to {
+    transform: rotateX(-18deg) rotateY(386deg);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) translateZ(0);
+  }
+
+  50% {
+    transform: translateY(-18px) translateZ(0);
+  }
+}
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    opacity: 0.55;
+
+    box-shadow:
+      0 0 0 rgba(52, 211, 153, 0);
+  }
+
+  50% {
+    opacity: 1;
+
+    box-shadow:
+      0 0 28px rgba(52, 211, 153, 0.15);
+  }
+}
+
+/* =========================================================
+   Reduced motion
+   ========================================================= */
+
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: .01ms !important;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
   }
+
+  .card-3d {
+    transition: none;
+  }
+}
+
+/* =========================================================
+   LIGHT THEME — PREMIUM GLASS
+   ========================================================= */
+
+html[data-theme="light"] {
+  --bg: #eef3f9;
+
+  --panel: rgba(255, 255, 255, 0.72);
+  --panel-strong: rgba(255, 255, 255, 0.92);
+
+  --line: rgba(15, 23, 42, 0.11);
+
+  --text: #0b1220;
+  --muted: #52627a;
+
+  --input-bg: rgba(255, 255, 255, 0.82);
+  --input-text: #0b1220;
+  --input-placeholder: #718096;
+
+  --cyan: #0891b2;
+  --violet: #7c3aed;
+  --green: #059669;
+  --pink: #db2777;
+}
+
+
+/* =========================================================
+   LIGHT BACKGROUND
+   ========================================================= */
+
+html[data-theme="light"] body {
+  background:
+    radial-gradient(
+      circle at 8% 8%,
+      rgba(34, 211, 238, 0.16),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 92% 12%,
+      rgba(139, 92, 246, 0.15),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 50% 80%,
+      rgba(236, 72, 153, 0.09),
+      transparent 30%
+    ),
+    linear-gradient(
+      135deg,
+      #f7fafc 0%,
+      #eef4fa 45%,
+      #f4f1fb 100%
+    );
+
+  color: var(--text);
+}
+
+
+/* =========================================================
+   LIGHT GRID
+   ========================================================= */
+
+html[data-theme="light"] .grid-bg {
+  opacity: 0.9;
+
+  background-image:
+    linear-gradient(
+      rgba(15, 23, 42, 0.055) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(15, 23, 42, 0.055) 1px,
+      transparent 1px
+    );
+
+  background-size: 46px 46px;
+}
+
+
+/* =========================================================
+   LIGHT ORBS
+   ========================================================= */
+
+html[data-theme="light"] .orb-one {
+  background:
+    radial-gradient(
+      circle,
+      rgba(34, 211, 238, 0.18),
+      transparent 68%
+    );
+}
+
+html[data-theme="light"] .orb-two {
+  background:
+    radial-gradient(
+      circle,
+      rgba(139, 92, 246, 0.17),
+      transparent 68%
+    );
+}
+
+html[data-theme="light"] .orb-three {
+  background:
+    radial-gradient(
+      circle,
+      rgba(236, 72, 153, 0.11),
+      transparent 70%
+    );
+}
+
+
+/* =========================================================
+   LIGHT GLASS
+   ========================================================= */
+
+html[data-theme="light"] .glass {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.92),
+      rgba(255, 255, 255, 0.66)
+    );
+
+  border: 1px solid rgba(15, 23, 42, 0.095);
+
+  box-shadow:
+    0 24px 65px rgba(15, 23, 42, 0.075),
+    0 2px 8px rgba(15, 23, 42, 0.025),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+
+  backdrop-filter: blur(24px);
+}
+
+
+/* Stronger 3D hover */
+
+html[data-theme="light"] .card-3d:hover {
+  transform: translateY(-7px) rotateX(2deg) rotateY(-1deg);
+
+  border-color: rgba(8, 145, 178, 0.25);
+
+  box-shadow:
+    0 32px 75px rgba(15, 23, 42, 0.12),
+    0 0 42px rgba(34, 211, 238, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+
+/* =========================================================
+   LIGHT HERO TYPOGRAPHY
+   ========================================================= */
+
+/*
+   Important:
+   The old gradient began with white.
+   White-on-light-background caused the hero
+   "See every transaction." text to disappear.
+*/
+
+html[data-theme="light"] .gradient-text {
+  background:
+    linear-gradient(
+      110deg,
+      #0891b2 0%,
+      #2563eb 38%,
+      #7c3aed 72%,
+      #db2777 100%
+    );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  color: transparent;
+}
+
+html[data-theme="light"] .neon-text {
+  text-shadow:
+    0 0 24px rgba(37, 99, 235, 0.12);
+}
+
+
+/* =========================================================
+   LIGHT TERMINAL
+   ========================================================= */
+
+html[data-theme="light"] .terminal {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(248, 250, 252, 0.96),
+      rgba(241, 245, 249, 0.9)
+    );
+
+  border: 1px solid rgba(15, 23, 42, 0.09);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 12px 30px rgba(15, 23, 42, 0.04);
+}
+
+
+/* =========================================================
+   LIGHT INPUTS
+   ========================================================= */
+
+html[data-theme="light"] input,
+html[data-theme="light"] textarea,
+html[data-theme="light"] select {
+  color: #0b1220 !important;
+
+  background:
+    rgba(255, 255, 255, 0.82) !important;
+
+  -webkit-text-fill-color: #0b1220 !important;
+
+  border-color:
+    rgba(15, 23, 42, 0.12) !important;
+
+  box-shadow:
+    inset 0 1px 2px rgba(15, 23, 42, 0.025);
+}
+
+html[data-theme="light"] input:hover,
+html[data-theme="light"] textarea:hover,
+html[data-theme="light"] select:hover {
+  border-color:
+    rgba(8, 145, 178, 0.22) !important;
+}
+
+html[data-theme="light"] input:focus,
+html[data-theme="light"] textarea:focus,
+html[data-theme="light"] select:focus {
+  border-color:
+    rgba(8, 145, 178, 0.48) !important;
+
+  box-shadow:
+    0 0 0 3px rgba(8, 145, 178, 0.08),
+    0 8px 24px rgba(8, 145, 178, 0.05);
+}
+
+html[data-theme="light"] input::placeholder,
+html[data-theme="light"] textarea::placeholder {
+  color: #718096 !important;
+  -webkit-text-fill-color: #718096 !important;
+}
+
+
+/* =========================================================
+   LIGHT NESTED PANELS
+   ========================================================= */
+
+html[data-theme="light"] .bg-slate-950\/40,
+html[data-theme="light"] .bg-slate-950\/35 {
+  background:
+    rgba(241, 245, 249, 0.72) !important;
+}
+
+html[data-theme="light"] .bg-white\/5 {
+  background:
+    rgba(15, 23, 42, 0.035) !important;
+}
+
+html[data-theme="light"] .border-white\/8,
+html[data-theme="light"] .border-white\/10 {
+  border-color:
+    rgba(15, 23, 42, 0.09) !important;
+}
+
+
+/* =========================================================
+   LIGHT TEXT HIERARCHY
+   ========================================================= */
+
+html[data-theme="light"] .text-white {
+  color: #0b1220 !important;
+}
+
+html[data-theme="light"] .text-slate-300 {
+  color: #334155 !important;
+}
+
+html[data-theme="light"] .text-slate-400 {
+  color: #52627a !important;
+}
+
+html[data-theme="light"] .text-slate-500 {
+  color: #64748b !important;
+}
+
+html[data-theme="light"] .text-slate-600 {
+  color: #64748b !important;
+}
+
+
+/* =========================================================
+   LIGHT ACTION BUTTONS
+   ========================================================= */
+
+/*
+   Enabled buttons keep their strong identity.
+   Disabled buttons are intentionally muted but still
+   look like actual UI controls.
+*/
+
+html[data-theme="light"] .cs-action:disabled {
+  opacity: 0.68;
+
+  filter: saturate(0.65);
+
+  color: #334155 !important;
+
+  -webkit-text-fill-color: #334155 !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #dbeafe,
+      #e2e8f0
+    );
+
+  border-color:
+    rgba(15, 23, 42, 0.09);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+html[data-theme="light"] .cs-action-violet:disabled {
+  background:
+    linear-gradient(
+      135deg,
+      #ede9fe,
+      #e0e7ff
+    );
+}
+
+html[data-theme="light"] .cs-action-pink:disabled {
+  background:
+    linear-gradient(
+      135deg,
+      #fce7f3,
+      #ffe4e6
+    );
+}
+
+
+/* =========================================================
+   LIGHT THEME TOGGLE
+   ========================================================= */
+
+.theme-toggle {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.45rem;
+
+  min-height: 42px;
+
+  padding: 0.6rem 0.85rem;
+
+  border:
+    1px solid rgba(148, 163, 184, 0.22);
+
+  border-radius: 0.85rem;
+
+  color: #e2e8f0;
+
+  background:
+    rgba(255, 255, 255, 0.055);
+
+  font-size: 0.78rem;
+  font-weight: 800;
+
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+  transition:
+    transform 0.18s ease,
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.theme-toggle:hover {
+  transform: translateY(-2px);
+
+  border-color:
+    rgba(103, 232, 249, 0.35);
+
+  background:
+    rgba(255, 255, 255, 0.1);
+
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.16),
+    0 0 22px rgba(34, 211, 238, 0.08);
+}
+
+.theme-toggle:active {
+  transform: translateY(1px) scale(0.97);
+}
+
+.theme-toggle:focus-visible {
+  outline: none;
+
+  box-shadow:
+    0 0 0 3px rgba(34, 211, 238, 0.12),
+    0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.theme-toggle-icon {
+  display: grid;
+
+  place-items: center;
+
+  width: 22px;
+  height: 22px;
+
+  border-radius: 9999px;
+
+  background:
+    rgba(255, 255, 255, 0.08);
+
+  font-size: 0.9rem;
+}
+
+
+/* Light toggle */
+
+html[data-theme="light"] .theme-toggle {
+  color: #334155;
+
+  background:
+    rgba(255, 255, 255, 0.84);
+
+  border-color:
+    rgba(15, 23, 42, 0.1);
+
+  box-shadow:
+    0 8px 24px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+html[data-theme="light"] .theme-toggle:hover {
+  color: #0f172a;
+
+  background:
+    #ffffff;
+
+  border-color:
+    rgba(8, 145, 178, 0.25);
+
+  box-shadow:
+    0 12px 28px rgba(15, 23, 42, 0.1),
+    0 0 22px rgba(34, 211, 238, 0.08);
+}
+
+html[data-theme="light"] .theme-toggle-icon {
+  color: #475569;
+
+  background:
+    rgba(15, 23, 42, 0.055);
+}
+
+
+/* =========================================================
+   THEME TRANSITION
+   ========================================================= */
+
+body,
+.glass,
+.terminal,
+input,
+textarea,
+select,
+.theme-toggle {
+  transition:
+    background-color 0.28s ease,
+    color 0.28s ease,
+    border-color 0.28s ease,
+    box-shadow 0.28s ease;
+}
+
+/* =========================================================
+   VOTING CANDIDATE CARDS — THEME SAFE
+   ========================================================= */
+
+.vote-candidate {
+  background: rgba(15, 23, 42, 0.35);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.vote-candidate:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.vote-candidate.selected {
+  background: rgba(236, 72, 153, 0.14);
+  border-color: rgba(244, 114, 182, 0.45);
+  box-shadow:
+    0 0 0 1px rgba(244, 114, 182, 0.08),
+    0 8px 25px rgba(236, 72, 153, 0.08);
+}
+
+/* Light mode */
+html[data-theme="light"] .vote-candidate {
+  background: rgba(255, 255, 255, 0.78);
+  border-color: rgba(15, 23, 42, 0.10);
+  color: #0b1220;
+}
+
+html[data-theme="light"] .vote-candidate:hover {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(236, 72, 153, 0.25);
+}
+
+html[data-theme="light"] .vote-candidate.selected {
+  background: linear-gradient(
+    135deg,
+    rgba(251, 207, 232, 0.75),
+    rgba(244, 114, 182, 0.18)
+  );
+  border-color: rgba(219, 39, 119, 0.45);
+  box-shadow:
+    0 0 0 1px rgba(219, 39, 119, 0.08),
+    0 10px 28px rgba(219, 39, 119, 0.10);
+}
+
+
+.greeting-value {
+  color: #ffffff;
+}
+
+html[data-theme="light"] .greeting-value {
+  color: #0b1220;
 }

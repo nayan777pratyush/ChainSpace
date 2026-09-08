@@ -9,9 +9,9 @@ const LOCAL_CHAIN_ID = 1337;
 const SEPOLIA_CHAIN_ID = 11155111;
 
 const DEFAULT_ADDRESSES = {
-  greeter: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-  token: "",
-  voting: "",
+  greeter: "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
+  token: "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
+  voting: "0x610178dA211FEF7D417bC0e6FeD39F05609AD788",
 };
 
 const shortAddress = (address) =>
@@ -50,6 +50,7 @@ const HomePage = () => {
   const [loading, setLoading] = useState(false);
   const [activeAction, setActiveAction] = useState("");
   const [error, setError] = useState("");
+  const [theme, setTheme] = useState("dark");
 
   const addresses = useMemo(
     () => ({
@@ -165,7 +166,10 @@ const HomePage = () => {
   }, [addresses.greeter, getProvider]);
 
   const loadToken = useCallback(async () => {
-    if (!addresses.token || !account || !ethers.utils.isAddress(addresses.token)) return;
+    if (!addresses.token || !account || !ethers.utils.isAddress(addresses.token)) {
+      setTokenBalance("");
+      return;
+    }
 
     try {
       const provider = getProvider();
@@ -175,14 +179,20 @@ const HomePage = () => {
         provider
       );
       const value = await contract.balanceOf(account);
-      setTokenBalance(value.toString());
+      setTokenBalance(ethers.utils.commify(value.toString()));
     } catch (tokenError) {
       console.error(tokenError);
+      setTokenBalance("");
     }
   }, [account, addresses.token, getProvider]);
 
   const loadVoting = useCallback(async () => {
-    if (!addresses.voting || !ethers.utils.isAddress(addresses.voting)) return;
+    if (!addresses.voting || !ethers.utils.isAddress(addresses.voting)) {
+      setCandidates([]);
+      setVoteCounts({});
+      setVoteCandidate("");
+      return;
+    }
 
     try {
       const provider = getProvider();
@@ -206,6 +216,19 @@ const HomePage = () => {
       console.error(votingError);
     }
   }, [addresses.voting, getProvider, voteCandidate]);
+
+useEffect(() => {
+  const savedTheme = window.localStorage.getItem("chainspace-theme");
+
+  if (savedTheme === "light" || savedTheme === "dark") {
+    setTheme(savedTheme);
+  }
+}, []);
+
+useEffect(() => {
+  document.documentElement.dataset.theme = theme;
+  window.localStorage.setItem("chainspace-theme", theme);
+}, [theme]);
 
   useEffect(() => {
     refreshWallet();
@@ -260,23 +283,43 @@ const HomePage = () => {
         params: [{ chainId: hexChainId }],
       });
     } catch (switchError) {
-      if (switchError.code === 4902 && targetChainId === SEPOLIA_CHAIN_ID) {
-        await window.ethereum.request({
-          method: "wallet_addEthereumChain",
-          params: [
-            {
-              chainId: "0xaa36a7",
-              chainName: "Sepolia",
-              nativeCurrency: {
-                name: "Sepolia ETH",
-                symbol: "ETH",
-                decimals: 18,
+      if (switchError.code === 4902) {
+        if (targetChainId === LOCAL_CHAIN_ID) {
+          await window.ethereum.request({
+            method: "wallet_addEthereumChain",
+            params: [
+              {
+                chainId: "0x539",
+                chainName: "Hardhat Local",
+                nativeCurrency: {
+                  name: "Ether",
+                  symbol: "ETH",
+                  decimals: 18,
+                },
+                rpcUrls: ["http://127.0.0.1:8545"],
               },
-              rpcUrls: ["https://rpc.sepolia.org"],
-              blockExplorerUrls: ["https://sepolia.etherscan.io"],
-            },
-          ],
-        });
+            ],
+          });
+        } else if (targetChainId === SEPOLIA_CHAIN_ID) {
+          await window.ethereum.request({
+            method: "wallet_addEthereumChain",
+            params: [
+              {
+                chainId: "0xaa36a7",
+                chainName: "Sepolia",
+                nativeCurrency: {
+                  name: "Sepolia ETH",
+                  symbol: "ETH",
+                  decimals: 18,
+                },
+                rpcUrls: ["https://rpc.sepolia.org"],
+                blockExplorerUrls: ["https://sepolia.etherscan.io"],
+              },
+            ],
+          });
+        } else {
+          setError("The configured network is not supported by the automatic switcher.");
+        }
       } else {
         setError(formatError(switchError));
       }
@@ -330,16 +373,29 @@ const HomePage = () => {
   };
 
   const transferTokens = async () => {
+    if (!isTargetNetwork) {
+      return setError("Switch to the configured network first.");
+    }
+
     if (!ethers.utils.isAddress(tokenRecipient)) {
       return setError("Enter a valid recipient address.");
     }
 
-    const amount = Number(tokenAmount);
-    if (!Number.isInteger(amount) || amount <= 0) {
+    if (!/^\d+$/.test(tokenAmount.trim())) {
       return setError("Token amount must be a positive whole number.");
     }
 
-    if (!addresses.token) {
+    let amount;
+    try {
+      amount = ethers.BigNumber.from(tokenAmount.trim());
+      if (amount.lte(0)) {
+        return setError("Token amount must be a positive whole number.");
+      }
+    } catch {
+      return setError("Token amount is too large or invalid.");
+    }
+
+    if (!addresses.token || !ethers.utils.isAddress(addresses.token)) {
       return setError("Token contract is not deployed/configured yet.");
     }
 
@@ -374,9 +430,14 @@ const HomePage = () => {
         gas: receipt.gasUsed.toString(),
       });
 
-      setTokenRecipient("");
-      setTokenAmount("");
-      await loadToken();
+setTokenRecipient("");
+setTokenAmount("");
+
+try {
+  await loadToken();
+} catch (balanceError) {
+  console.error("Token balance refresh failed:", balanceError);
+}
     } catch (txError) {
       setError(formatError(txError));
     } finally {
@@ -387,6 +448,7 @@ const HomePage = () => {
 
   const castVote = async () => {
     if (!voteCandidate) return setError("Choose a candidate.");
+    if (!isTargetNetwork) return setError("Switch to the configured network first.");
     if (!addresses.voting) {
       return setError("Voting contract is not deployed/configured yet.");
     }
@@ -473,12 +535,31 @@ const HomePage = () => {
           </button>
         </div>
 
-        <button
-          onClick={connectWallet}
-          className="rounded-2xl border border-cyan-300/20 bg-cyan-300/10 px-4 py-2.5 text-sm font-semibold text-cyan-100 shadow-lg shadow-cyan-500/10 transition hover:-translate-y-0.5 hover:bg-cyan-300/15"
-        >
-          {account ? shortAddress(account) : "Connect wallet"}
-        </button>
+<div className="flex items-center gap-2">
+  <button
+    type="button"
+    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+    className="theme-toggle"
+    aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+    title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+  >
+    <span className="theme-toggle-icon">
+      {theme === "dark" ? "☀" : "☾"}
+    </span>
+
+    <span className="hidden sm:inline">
+      {theme === "dark" ? "Light" : "Dark"}
+    </span>
+  </button>
+
+  <button
+    type="button"
+    onClick={connectWallet}
+    className="rounded-2xl border border-cyan-300/20 bg-cyan-300/10 px-4 py-2.5 text-sm font-semibold text-cyan-100 shadow-lg shadow-cyan-500/10 transition hover:-translate-y-0.5 hover:bg-cyan-300/15"
+  >
+    {account ? shortAddress(account) : "Connect wallet"}
+  </button>
+</div>
       </nav>
 
       <section id="top" className="relative z-10 mx-auto max-w-7xl px-5 pb-12 pt-14 sm:px-8 sm:pt-20">
@@ -616,7 +697,7 @@ const HomePage = () => {
               <div className="text-xs uppercase tracking-widest text-slate-500">
                 Current state
               </div>
-              <div className="mt-3 min-h-[56px] text-xl font-bold text-white">
+              <div className="greeting-value mt-3 min-h-[56px] text-xl font-bold">
                 “{greeting || "Loading contract…"}”
               </div>
             </div>
@@ -631,7 +712,7 @@ const HomePage = () => {
               <button
                 onClick={changeGreeting}
                 disabled={loading || !account}
-                className="mt-3 w-full rounded-2xl bg-cyan-300 px-4 py-3 text-sm font-black text-slate-950 transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40"
+                className="cs-action mt-3 w-full"
               >
                 {activeAction === "greeting" ? "Signing…" : "Change greeting"}
               </button>
@@ -673,7 +754,7 @@ const HomePage = () => {
               <button
                 onClick={transferTokens}
                 disabled={loading || !account || !addresses.token}
-                className="w-full rounded-2xl bg-violet-300 px-4 py-3 text-sm font-black text-slate-950 transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40"
+                className="cs-action cs-action-violet w-full"
               >
                 {activeAction === "token" ? "Signing…" : "Send LT"}
               </button>
@@ -694,10 +775,10 @@ const HomePage = () => {
                   <button
                     key={candidate}
                     onClick={() => setVoteCandidate(candidate)}
-                    className={`flex w-full items-center justify-between rounded-2xl border px-4 py-3 text-left transition ${
+                    className={`vote-candidate flex w-full items-center justify-between rounded-2xl border px-4 py-3 text-left transition ${
                       voteCandidate === candidate
-                        ? "border-pink-300/30 bg-pink-300/10"
-                        : "border-white/8 bg-slate-950/35 hover:bg-white/5"
+                        ? "selected"
+                        : ""
                     }`}
                   >
                     <span className="font-mono text-xs text-slate-300">
@@ -718,7 +799,7 @@ const HomePage = () => {
             <button
               onClick={castVote}
               disabled={loading || !account || !voteCandidate}
-              className="mt-4 w-full rounded-2xl bg-pink-300 px-4 py-3 text-sm font-black text-slate-950 transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40"
+              className="cs-action cs-action-pink mt-4 w-full"
             >
               {activeAction === "vote" ? "Casting vote…" : "Cast vote"}
             </button>

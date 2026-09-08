@@ -2,6 +2,8 @@
 pragma solidity ^0.8.4;
 
 contract Wallet {
+    address public immutable owner;
+
     event Deposit(
         address indexed from,
         uint256 amount
@@ -11,6 +13,10 @@ contract Wallet {
         address indexed to,
         uint256 amount
     );
+
+    constructor() {
+        owner = msg.sender;
+    }
 
     receive() external payable {
         emit Deposit(msg.sender, msg.value);
@@ -26,10 +32,8 @@ contract Wallet {
     }
 
     function withdraw(uint256 amount) external {
-        require(
-            amount <= address(this).balance,
-            "Insufficient wallet balance"
-        );
+        require(msg.sender == owner, "Only owner can withdraw");
+        require(amount <= address(this).balance, "Insufficient wallet balance");
 
         payable(msg.sender).transfer(amount);
 
