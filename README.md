@@ -7,7 +7,7 @@ The project started as a small ethers.js learning repository and has been upgrad
 ## ✨ Features
 
 - 🦊 MetaMask wallet connection
-- 🌐 Network detection + network switching
+- 🌐 Network detection + Sepolia network validation
 - 💰 Live ETH balance
 - ✍️ Greeter read/write interaction
 - 📡 `GreetingChanged` event history
@@ -65,7 +65,10 @@ npm run deploy:local
 
 The deployment script prints the addresses for all contracts.
 
-For the frontend, the local Greeter address defaults to the standard Hardhat deployment address. If you redeploy from a clean chain, update `.env.local` with the printed addresses.
+For the frontend, the local contract addresses can be provided through
+`.env.local`. The app includes the standard Hardhat deployment addresses
+as local fallbacks, but updating `.env.local` is recommended after a fresh
+deployment.
 
 Example:
 
@@ -170,7 +173,8 @@ This ensures `Components/artifacts` exists when the frontend imports contract AB
 
 Import the GitHub repository into Vercel.
 
-Set these **Production** environment variables:
+Set these Vercel environment variables for Production
+(and Preview if you want preview deployments to use Sepolia):
 
 ```text
 NEXT_PUBLIC_CHAIN_ID=11155111
@@ -242,4 +246,24 @@ SmartContracts/
 
 ## License
 
-MIT
+This project is licensed under the MIT License.
+
+Copyright (c) 2026 Pratyush Bhattacharya
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
