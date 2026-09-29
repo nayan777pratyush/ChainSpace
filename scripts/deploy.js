@@ -22,8 +22,10 @@ function writeLocalFrontendEnv(addresses) {
 }
 
 async function main() {
-  const [deployer, candidate2, candidate3] =
-    await hre.ethers.getSigners();
+  const [deployer] = await hre.ethers.getSigners();
+
+const candidate2 = hre.ethers.Wallet.createRandom().address;
+const candidate3 = hre.ethers.Wallet.createRandom().address;
 
   console.log("Deploying with:", deployer.address);
   console.log("Network:", hre.network.name);
@@ -39,8 +41,8 @@ async function main() {
   const Voting = await hre.ethers.getContractFactory("VotingApp");
   const voting = await Voting.deploy([
     deployer.address,
-    candidate2.address,
-    candidate3.address,
+    candidate2,
+    candidate3,
   ]);
   await voting.deployed();
 

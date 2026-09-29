@@ -29,8 +29,7 @@ const formatError = (error) => {
   return "Something went wrong. Please try again.";
 };
 
-const envAddress = (key, fallback = "") =>
-  process.env[key] || fallback;
+
 
 const HomePage = () => {
   const [account, setAccount] = useState("");
@@ -52,23 +51,22 @@ const HomePage = () => {
   const [error, setError] = useState("");
   const [theme, setTheme] = useState("dark");
 
-  const addresses = useMemo(
-    () => ({
-      greeter: envAddress(
-        "NEXT_PUBLIC_GREETER_ADDRESS",
-        DEFAULT_ADDRESSES.greeter
-      ),
-      token: envAddress(
-        "NEXT_PUBLIC_TOKEN_ADDRESS",
-        DEFAULT_ADDRESSES.token
-      ),
-      voting: envAddress(
-        "NEXT_PUBLIC_VOTING_ADDRESS",
-        DEFAULT_ADDRESSES.voting
-      ),
-    }),
-    []
-  );
+const addresses = useMemo(
+  () => ({
+    greeter:
+      process.env.NEXT_PUBLIC_GREETER_ADDRESS ||
+      DEFAULT_ADDRESSES.greeter,
+
+    token:
+      process.env.NEXT_PUBLIC_TOKEN_ADDRESS ||
+      DEFAULT_ADDRESSES.token,
+
+    voting:
+      process.env.NEXT_PUBLIC_VOTING_ADDRESS ||
+      DEFAULT_ADDRESSES.voting,
+  }),
+  []
+);
 
   const targetChainId = Number(
     process.env.NEXT_PUBLIC_CHAIN_ID || LOCAL_CHAIN_ID
@@ -134,6 +132,7 @@ const HomePage = () => {
 
     try {
       const provider = getProvider();
+
       const contract = new ethers.Contract(
         addresses.greeter,
         Greeter.abi,
